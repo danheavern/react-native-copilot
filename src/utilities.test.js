@@ -38,6 +38,17 @@ describe('getFirstStep', () => {
     const firstStep = utilities.getFirstStep(steps);
     expect(firstStep).toBe(steps[1]);
   });
+
+  test('With groups', () => {
+    const steps = [
+      { name: 'Step1', order: 0, group: 'group1' },
+      { name: 'Step2', order: 1, group: 'group2' },
+      { name: 'Step3', order: 2, group: 'group2' },
+    ];
+
+    const firstStep = utilities.getFirstStep(steps, 'group2');
+    expect(firstStep).toBe(steps[1]);
+  });
 });
 
 describe('getLastStep', () => {
@@ -78,6 +89,17 @@ describe('getLastStep', () => {
     const lastStep = utilities.getLastStep(steps);
     expect(lastStep).toBe(steps[0]);
   });
+
+  test('With groups', () => {
+    const steps = [
+      { name: 'Step1', order: 0, group: 'group1' },
+      { name: 'Step2', order: 1, group: 'group1' },
+      { name: 'Step3', order: 2, group: 'group2' },
+    ];
+
+    const firstStep = utilities.getLastStep(steps, 'group1');
+    expect(firstStep).toBe(steps[1]);
+  });
 });
 
 describe('getStepNumber', () => {
@@ -107,6 +129,17 @@ describe('getStepNumber', () => {
 
     expect(utilities.getStepNumber(steps, steps[0])).toBe(2);
     expect(utilities.getStepNumber(steps, steps[1])).toBe(3);
+    expect(utilities.getStepNumber(steps, steps[2])).toBe(1);
+  });
+
+  test('With groups', () => {
+    const steps = [
+      { name: 'Step1', order: 0, group: 'group1' },
+      { name: 'Step2', order: 1, group: 'group1' },
+      { name: 'Step3', order: 2, group: 'group2' },
+    ];
+    expect(utilities.getStepNumber(steps, steps[0])).toBe(1);
+    expect(utilities.getStepNumber(steps, steps[1])).toBe(2);
     expect(utilities.getStepNumber(steps, steps[2])).toBe(1);
   });
 });
@@ -140,6 +173,18 @@ describe('getPrevStep', () => {
     expect(utilities.getPrevStep(steps, steps[1])).toBe(steps[0]);
     expect(utilities.getPrevStep(steps, steps[2])).toBe(null);
   });
+
+  test('With groups', () => {
+    const steps = [
+      { name: 'Step1', order: 0, group: 'group1' },
+      { name: 'Step2', order: 1, group: 'group2' },
+      { name: 'Step3', order: 2, group: 'group1' },
+    ];
+
+    expect(utilities.getPrevStep(steps, steps[0])).toBe(null);
+    expect(utilities.getPrevStep(steps, steps[1])).toBe(null);
+    expect(utilities.getPrevStep(steps, steps[2])).toBe(steps[0]);
+  });
 });
 
 describe('getNextStep', () => {
@@ -170,5 +215,17 @@ describe('getNextStep', () => {
     expect(utilities.getNextStep(steps, steps[0])).toBe(steps[1]);
     // expect(utilities.getNextStep(steps, steps[1])).toBe(null);
     expect(utilities.getNextStep(steps, steps[2])).toBe(steps[0]);
+  });
+
+  test('With groups', () => {
+    const steps = [
+      { name: 'Step1', order: 0, group: 'group1' },
+      { name: 'Step2', order: 1, group: 'group2' },
+      { name: 'Step3', order: 2, group: 'group1' },
+    ];
+
+    expect(utilities.getNextStep(steps, steps[0])).toBe(steps[2]);
+    // expect(utilities.getNextStep(steps, steps[1])).toBe(null);
+    // expect(utilities.getNextStep(steps, steps[2])).toBe(null);
   });
 });

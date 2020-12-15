@@ -83,13 +83,11 @@ const copilot = ({
         (group: string = this.state.currentGroup): ?Step => getLastStep(this.state.steps, group);
 
       getPrevStep =
-        (step: ?Step = this.state.currentStep,
-          group: string = this.state.currentGroup): ?Step =>
-          getPrevStep(this.state.steps, step, group);
+        (step: ?Step = this.state.currentStep): ?Step =>
+          getPrevStep(this.state.steps, step);
 
-      getNextStep = (step: ?Step = this.state.currentStep,
-        group: string = this.state.currentGroup): ?Step =>
-        getNextStep(this.state.steps, step, group);
+      getNextStep = (step: ?Step = this.state.currentStep): ?Step =>
+        getNextStep(this.state.steps, step);
 
       setCurrentStep = async (step: Step, move: boolean = true): void => {
         await this.setState({ currentStep: step });
