@@ -23,6 +23,7 @@ const MAX_START_TRIES = 120;
 type State = {
   steps: { [string]: Step },
   currentStep: ?Step,
+  currentGroup: string,
   visible: boolean,
   androidStatusBarVisible: boolean,
   backdropColor: string,
@@ -75,17 +76,22 @@ const copilot = ({
       getStepNumber = (step: ?Step = this.state.currentStep): number =>
         getStepNumber(this.state.steps, step);
 
-      getFirstStep = (): ?Step => getFirstStep(this.state.steps);
+      getFirstStep =
+        (group: string = this.state.currentGroup): ?Step => getFirstStep(this.state.steps, group);
 
-      getLastStep = (): ?Step => getLastStep(this.state.steps);
+      getLastStep =
+        (group: string = this.state.currentGroup): ?Step => getLastStep(this.state.steps, group);
 
-      getPrevStep = (step: ?Step = this.state.currentStep): ?Step =>
-        getPrevStep(this.state.steps, step);
+      getPrevStep =
+        (step: ?Step = this.state.currentStep,
+          group: string = this.state.currentGroup): ?Step =>
+          getPrevStep(this.state.steps, step, group);
 
-      getNextStep = (step: ?Step = this.state.currentStep): ?Step =>
-        getNextStep(this.state.steps, step);
+      getNextStep = (step: ?Step = this.state.currentStep,
+        group: string = this.state.currentGroup): ?Step =>
+        getNextStep(this.state.steps, step, group);
 
-      setCurrentStep = async (step: Step, move?: boolean = true): void => {
+      setCurrentStep = async (step: Step, move: boolean = true): void => {
         await this.setState({ currentStep: step });
         this.eventEmitter.emit('stepChange', step);
 
@@ -146,8 +152,12 @@ const copilot = ({
         await this.setCurrentStep(this.getPrevStep());
       }
 
-      start = async (fromStep?: string, scrollView?: React.RefObject): void => {
+      start = async (fromStep?: string, scrollView?: React.RefObject, group?: string): void => {
         const { steps } = this.state;
+
+        if (group) {
+          this.setState({ currentGroup: group });
+        }
 
         if (!this.state.scrollView) {
           this.setState({ scrollView });

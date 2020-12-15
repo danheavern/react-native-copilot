@@ -2,6 +2,7 @@
 export type Step = {
   name: string,
   order: number,
+  group: string,
   visible: boolean,
   target: React$Element,
   wrapper: React$Element,
